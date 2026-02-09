@@ -82,6 +82,20 @@
 # Generate models and tables, according to the domain model.
 # TODO!
 
+class Createmovies < ActiveRecord::Migration[7.0]
+  def change
+    create_table :movies do |t|
+      t.string "title"
+      t.integer "year_released"
+      t.string "rated"
+      t.integer "studio_id"
+
+      t.timestamps
+    end
+  end
+end
+
+
 # Insert data into the database that reflects the sample data shown above.
 # Do not use hard-coded foreign key IDs.
 # TODO!
