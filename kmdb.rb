@@ -78,10 +78,11 @@
 # Delete existing data, so you'll start fresh each time this script is run.
 # Use `Model.destroy_all` code.
 # TODO!
-Movie.destroy_all
-Studio.destroy_all
-Actor.destroy_all
 Role.destroy_all
+Movie.destroy_all
+Actor.destroy_all
+Studio.destroy_all
+Agent.destroy_all
 
 # Generate models and tables, according to the domain model.
 # TODO!
@@ -95,28 +96,123 @@ new_studio = Studio.new
 new_studio["name"] = "Warner Bros."
 new_studio.save
 
-#movie = Movie.new
+puts "studios: #{Studio.all.count}"
+
+warner = Studio.find_by({"name" => "Warner Bros."})
+#querying the studio into a variable
+
+movie = Movie.new
 movie["title"] = "Batman Begins"
-movie["year_released"] = "2005"
+movie["year_released"] = 2005
 movie["rated"] = "PG-13"
-movie["studio_id"] = Warner Bros. ["id"]
+movie["studio_id"] = warner["id"]
 movie.save
 
 movie = Movie.new
 movie["title"] = "The Dark Knight"
-movie["year_released"] = "2008"
+movie["year_released"] = 2008
 movie["rated"] = "PG-13"
-movie["studio_id"] = Warner Bros. ["id"]
+movie["studio_id"] = warner["id"]
 movie.save
 
 movie = Movie.new
 movie["title"] = "The Dark Knight Rises"
-movie["year_released"] = "2012"
+movie["year_released"] = 2012
 movie["rated"] = "PG-13"
-movie["studio_id"] = Warner Bros. ["id"]
+movie["studio_id"] = warner["id"]
 movie.save
 
 puts "movies: #{Movie.all.count}"
+
+actor = Actor.new
+actor["name"] = "Christian Bale"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Michael Caine"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Liam Neeson"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Katie Holmes"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Gary Oldman"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Heath Ledger"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Aaron Eckhart"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Maggie Gyllenhaal"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Tom Hardy"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Joseph Gordon-Levitt"
+actor.save
+
+actor = Actor.new
+actor["name"] = "Anne Hathaway"
+actor.save
+
+puts "actors: #{Actor.all.count}"
+
+
+batman_begins = Movie.find_by({"title" => "Batman Begins"})
+christian_bale = Actor.find_by({"name" => "Christian Bale"})
+
+role = Role.new
+role["movie_id"] = batman_begins["id"]
+role["actor_id"] = christian_bale["id"]
+role["character_name"] = "Bruce Wayne"
+role.save
+
+michael_caine = Actor.find_by({"name" => "Michael Caine"})
+role = Role.new
+role["movie_id"] = batman_begins["id"]
+role["actor_id"] = michael_caine["id"]
+role["character_name"] = "Alfred"
+role.save
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+puts "roles: #{Role.all.count}"
+
+agent = Agent.new
+agent["name"] = "Sydney"
+agent.save
+
+puts "agents: #{Agent.all.count}"
+
+actor = Actor.find_by({ "name" => "Christian Bale" })
+actor["agent_id"] = "1"
+actor.save
+puts actor
 
 # Prints a header for the movies output
 puts "Movies"
@@ -124,7 +220,11 @@ puts "======"
 puts ""
 
 # Query the movies data and loop through the results to display the movies output.
-# TODO!
+movies = Movie.all
+for movie in movies
+  studio = Studio.find_by({"id" => movie["studio_id"]})
+  puts "#{movie["title"]}    #{movie["year_released"]}    #{movie["rated"]}    #{studio["name"]}"
+end
 
 # Prints a header for the cast output
 puts ""
@@ -134,6 +234,12 @@ puts ""
 
 # Query the cast data and loop through the results to display the cast output for each movie.
 # TODO!
+roles = Role.all
+for role in roles
+  movie = Movie.find_by({"id" => role["movie_id"]}) 
+  actor = Actor.find_by({"id" => role["actor_id"]})
+  puts "#{movie["title"]}    #{actor["name"]}    #{role["character_name"]}"     
+end
 
 # Prints a header for the agent's list of represented actors output
 puts ""
@@ -143,3 +249,9 @@ puts ""
 
 # Query the actor data and loop through the results to display the agent's list of represented actors output.
 # TODO!
+
+actors = Actor.all
+for actor in actors
+  agent = Agent.find_by({"id" => actor["agent_id"]}) 
+  puts "#{actor["name"]}"     
+end
